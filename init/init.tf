@@ -6,29 +6,22 @@ terraform {
     }
   }
 
-#  backend "s3" {
-#    key       = "tf.tfstate"
-#    bucket    = "babyteacher-state"
-#    endpoints = { s3 = "https://s3.fr-par.scw.cloud" }
-#    region    = "fr-par"
-#
-#    skip_credentials_validation = true
-#    skip_region_validation      = true
-#  }
+    backend "local" {
+      path = "tf.tfstate"
+    }
 }
-
 provider "scaleway" {
 }
 
-resource "scaleway_object_bucket" "babyteacher-bucket" {
-  name = "babyteacher_bucket"
+resource "scaleway_object_bucket" "babyteacher_bucket" {
+  name = "babyteacher-bucket"
   tags = {
     projet = "esgi_al2"
   }
 }
 
-resource "scaleway_registry_namespace" "babyteacher-regitstry" {
-  name        = "babyteacher_registry"
+resource "scaleway_registry_namespace" "babyteacher_regitstry" {
+  name        = "babyteacher-registry"
   description = "Baby teacher main registry"
   is_public   = false
 }

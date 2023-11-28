@@ -26,17 +26,17 @@ terraform {
   }
 }
 
-#resource "scaleway_vpc_private_network" "this" {
-#  name   = "babyteacher-private-network"
-#  region = "fr-par"
-#}
+resource "scaleway_vpc_private_network" "this" {
+  name   = "babyteacher-private-network"
+  region = "fr-par"
+}
 
 resource "scaleway_k8s_cluster" "this" {
   cni                         = "cilium"
   name                        = "babyteacher-cluster"
   version                     = "1.24.3"
   delete_additional_resources = true
-#  private_network_id          = scaleway_vpc_private_network.this.id
+  private_network_id          = scaleway_vpc_private_network.this.id
 }
 
 resource "scaleway_k8s_pool" "this" {

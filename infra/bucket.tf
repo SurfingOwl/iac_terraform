@@ -46,16 +46,13 @@ resource "scaleway_k8s_pool" "this" {
   size       = 1
 }
 
-resource "local_file" "kubeconfig" {
-  filename        = "${path.module}/kubeconfig"
-  file_permission = "0600"
-  content         = "scaleway_k8s_cluster.this.kubeconfig[0].config_file"
-}
-
-resource "scaleway_registry_namespace" "babyteacher_regitstry" {
-  name        = "babyteacher-registry"
-  description = "Baby teacher main registry"
-  is_public   = false
+resource "null_resource" "kubeconfig" {
+  depends_on = [scaleway_k8s_pool.this] # at least one pool here
+  triggers   = {
+    host                   = scaleway_k8s_cluster.this.kubeconfig[0].host
+    token                  = scaleway_k8s_cluster.this.kubeconfig[0].token
+    cluster_ca_certificate = scaleway_k8s_cluster.this.kubeconfig[0].cluster_ca_certificate
+  }
 }
 
 resource "kubernetes_pod" "babyteacher_backend" {
@@ -68,7 +65,7 @@ resource "kubernetes_pod" "babyteacher_backend" {
   spec {
     container {
       name  = "backend"
-      image = "backend:latest"
+      image = data.scaleway_registry_image.this.image_id
       port {
         name           = "web-backend"
         container_port = 3001
@@ -77,16 +74,23 @@ resource "kubernetes_pod" "babyteacher_backend" {
   }
 }
 
-data "scaleway_registry_image" "babyteacher_backend" {
+data "scaleway_registry_namespace" "this" {
+  name   = "babyteacher-registry"
+  region = "fr-par"
+
+}
+data "scaleway_registry_image" "this" {
   name         = "backend"
   region       = "fr-par"
   tags         = ["latest"]
-  namespace_id = scaleway_registry_namespace.babyteacher_regitstry.id
+  namespace_id = data.scaleway_registry_namespace.this.namespace_id
 }
 
 provider "scaleway" {}
 provider "kubernetes" {
-  host                   = scaleway_k8s_cluster.this.apiserver_url
-  cluster_ca_certificate = base64decode(scaleway_k8s_cluster.this.kubeconfig[0].cluster_ca_certificate)
-  token                  = scaleway_k8s_cluster.this.kubeconfig[0].token
+  host                   = null_resource.kubeconfig.triggers.host
+  token                  = null_resource.kubeconfig.triggers.token
+  cluster_ca_certificate = base64decode(
+    null_resource.kubeconfig.triggers.cluster_ca_certificate
+  )
 }

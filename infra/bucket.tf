@@ -9,7 +9,7 @@ terraform {
       version = "2.4.0"
     }
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source  = "hashicorp/kubernetes"
       version = "2.24.0"
     }
   }
@@ -26,11 +26,17 @@ terraform {
   }
 }
 
+#resource "scaleway_vpc_private_network" "this" {
+#  name   = "babyteacher-private-network"
+#  region = "fr-par"
+#}
+
 resource "scaleway_k8s_cluster" "this" {
   cni                         = "cilium"
   name                        = "babyteacher-cluster"
   version                     = "1.24.3"
   delete_additional_resources = true
+#  private_network_id          = scaleway_vpc_private_network.this.id
 }
 
 resource "scaleway_k8s_pool" "this" {
@@ -66,11 +72,11 @@ resource "kubernetes_pod" "babyteacher_pod" {
 }
 
 data "scaleway_registry_namespace" "babyteacher_registry" {
-  name = "babyteacher-registry"
+  name   = "babyteacher-registry"
   region = "fr-par"
 }
 data "scaleway_registry_image" "babyteacher_backend" {
-  name = "backend"
+  name   = "backend"
   region = "fr-par"
 }
 

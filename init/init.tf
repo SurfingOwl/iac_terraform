@@ -20,12 +20,6 @@ resource "scaleway_object_bucket" "babyteacher_bucket" {
   }
 }
 
-resource "scaleway_registry_namespace" "babyteacher_regitstry" {
-  name        = "babyteacher-registry"
-  description = "Baby teacher main registry"
-  is_public   = false
-}
-
 output "endpoint" {
   value = "scaleway_object_bucket.babyteacher-state.endpoint"
 }

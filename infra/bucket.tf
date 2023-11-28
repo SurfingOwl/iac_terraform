@@ -52,11 +52,17 @@ resource "local_file" "kubeconfig" {
   content         = "scaleway_k8s_cluster.this.kubeconfig[0].config_file"
 }
 
-resource "kubernetes_pod" "babyteacher_pod" {
+resource "scaleway_registry_namespace" "babyteacher_regitstry" {
+  name        = "babyteacher-registry"
+  description = "Baby teacher main registry"
+  is_public   = false
+}
+
+resource "kubernetes_pod" "babyteacher_backend" {
   metadata {
-    name   = "babyteacher-pod"
+    name   = "babyteacher-backend"
     labels = {
-      app = "babyteacher-pod"
+      app = "babyteacher-backend"
     }
   }
   spec {
@@ -71,13 +77,11 @@ resource "kubernetes_pod" "babyteacher_pod" {
   }
 }
 
-data "scaleway_registry_namespace" "babyteacher_registry" {
-  name   = "babyteacher-registry"
-  region = "fr-par"
-}
 data "scaleway_registry_image" "babyteacher_backend" {
-  name   = "backend"
-  region = "fr-par"
+  name         = "backend"
+  region       = "fr-par"
+  tags         = ["latest"]
+  namespace_id = scaleway_registry_namespace.babyteacher_regitstry.id
 }
 
 provider "scaleway" {}

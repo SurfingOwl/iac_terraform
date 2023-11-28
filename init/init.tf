@@ -6,9 +6,9 @@ terraform {
     }
   }
 
-    backend "local" {
-      path = "tf.tfstate"
-    }
+  backend "local" {
+    path = "tf.tfstate"
+  }
 }
 provider "scaleway" {
 }

@@ -16,7 +16,7 @@ terraform {
 
   backend "s3" {
     key       = "tf.tfstate"
-    bucket    = "babyteacher-bucket"
+    bucket    = "babyteacher-s3"
     endpoints = { s3 = "https://s3.fr-par.scw.cloud" }
     region    = "fr-par"
 
@@ -47,7 +47,7 @@ resource "scaleway_k8s_pool" "this" {
 }
 
 resource "null_resource" "kubeconfig" {
-  depends_on = [scaleway_k8s_pool.this] # at least one pool here
+  depends_on = [scaleway_k8s_pool.this]
   triggers   = {
     host                   = scaleway_k8s_cluster.this.kubeconfig[0].host
     token                  = scaleway_k8s_cluster.this.kubeconfig[0].token
@@ -65,26 +65,59 @@ resource "kubernetes_pod" "babyteacher_backend" {
   spec {
     container {
       name  = "backend"
-      image = data.scaleway_registry_image.this.image_id
+#      image = data.scaleway_registry_image.backend
+      image = "rg.fr-par.scw.cloud/babyteacher-registry/backend:latest"
       port {
         name           = "web-backend"
         container_port = 3001
       }
     }
+
+    container {
+      name  = "frontend"
+#      image = data.scaleway_registry_image.frontend
+      image = "rg.fr-par.scw.cloud/babyteacher-registry/frontend:latest"
+      port {
+        name           = "web-frontend"
+        container_port = 4200
+      }
+    }
+
+    container {
+      name  = "mysql"
+#      image = data.scaleway_registry_image.mysql
+      image = "rg.fr-par.scw.cloud/babyteacher-registry/mysql:latest"
+      port {
+        name           = "mysql"
+        container_port = 3306
+      }
+    }
   }
 }
 
-data "scaleway_registry_namespace" "this" {
-  name   = "babyteacher-registry"
-  region = "fr-par"
-
-}
-data "scaleway_registry_image" "this" {
-  name         = "backend"
-  region       = "fr-par"
-  tags         = ["latest"]
-  namespace_id = data.scaleway_registry_namespace.this.namespace_id
-}
+#data "scaleway_registry_namespace" "this" {
+#  name   = "babyteacher-registry"
+#  region = "fr-par"
+#
+#}
+#data "scaleway_registry_image" "backend" {
+#  name         = "backend"
+#  region       = "fr-par"
+#  tags         = ["latest"]
+#  namespace_id = data.scaleway_registry_namespace.this.namespace_id
+#}
+#data "scaleway_registry_image" "frontend" {
+#  name         = "frontend"
+#  region       = "fr-par"
+#  tags         = ["latest"]
+#  namespace_id = data.scaleway_registry_namespace.this.namespace_id
+#}
+#data "scaleway_registry_image" "mysql" {
+#  name         = "mysql"
+#  region       = "fr-par"
+#  tags         = ["latest"]
+#  namespace_id = data.scaleway_registry_namespace.this.namespace_id
+#}
 
 provider "scaleway" {}
 provider "kubernetes" {

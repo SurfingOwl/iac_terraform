@@ -13,8 +13,8 @@ terraform {
 provider "scaleway" {
 }
 
-resource "scaleway_object_bucket" "babyteacher_bucket" {
-  name = "babyteacher-bucket"
+resource "scaleway_object_bucket" "babyteacher_s3" {
+  name = "babyteacher-s3"
   tags = {
     projet = "esgi_al2"
   }
@@ -24,8 +24,4 @@ resource "scaleway_registry_namespace" "babyteacher_regitstry" {
   name        = "babyteacher-registry"
   description = "Baby teacher main registry"
   is_public   = false
-}
-
-output "endpoint" {
-  value = "scaleway_object_bucket.babyteacher-state.endpoint"
 }

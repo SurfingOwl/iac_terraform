@@ -81,8 +81,8 @@ resource "kubernetes_service" "frontend_service" {
       app = "babyteacher-frontend"
     }
     port {
-      port        = 4200
-      target_port = 4200
+      port        = 80
+      target_port = 80
     }
   }
 }
@@ -125,6 +125,8 @@ resource "kubernetes_secret" "backend_secret" {
     name = "backend-secret"
   }
   data = {
+    username            = ""
+    password            = ""
     MYSQL_DATABASE      = "babyteacher" # A MODIFIER
     MYSQL_USER          = "babyuser" # A MODIFIER
     MYSQL_PASSWORD      = "pass" # A MODIFIER
@@ -177,7 +179,7 @@ resource "kubernetes_pod" "babyteacher_frontend" {
       image = "rg.fr-par.scw.cloud/babyteacher-registry/frontend:latest"
       port {
         name           = "web-frontend"
-        container_port = 4200
+        container_port = 80
       }
     }
   }
@@ -222,34 +224,61 @@ resource "kubernetes_pod" "babyteacher_mongo" {
 }
 
 provider "scaleway" {}
-
-provider "helm" {
-  kubernetes {
-    host                   = null_resource.kubeconfig.triggers.host
-    token                  = null_resource.kubeconfig.triggers.token
-    cluster_ca_certificate = base64decode(
-      null_resource.kubeconfig.triggers.cluster_ca_certificate
-    )
-  }
+provider "helm" {}
+provider "kubernetes" {
+  host                   = null_resource.kubeconfig.triggers.host
+  token                  = null_resource.kubeconfig.triggers.token
+  cluster_ca_certificate = base64decode(
+    null_resource.kubeconfig.triggers.cluster_ca_certificate
+  )
 }
 
-#resource "scaleway_lb_ip" "nginx_ip" {
-#  zone       = "fr-par-1"
-#  project_id = scaleway_k8s_cluster.this.project_id
-#}
+resource "scaleway_lb_ip" "nginx_ip" {
+  depends_on = [
+    kubernetes_service.backend_service,
+    kubernetes_service.database_service,
+    kubernetes_service.mongo_service,
+    kubernetes_service.frontend_service
+  ]
+  zone       = "fr-par-1"
+  project_id = scaleway_k8s_cluster.this.project_id
+}
 
 resource "helm_release" "nginx_ingress" {
-  name      = "nginx-ingress"
-  namespace = "ingress-nginx"
+  depends_on = [scaleway_lb_ip.nginx_ip]
+  name       = "nginx-ingress"
+  namespace  = "ingress-nginx"
 
   repository       = "https://kubernetes.github.io/ingress-nginx"
   chart            = "ingress-nginx"
   create_namespace = true
   wait             = true
   timeout          = 600
+
+#  set {
+#    name = "controller.service.loadBalancerIP"
+#    value = scaleway_lb_ip.nginx_ip.ip_address
+#  }
+#  set {
+#    name = "controller.config.use-proxy-protocol"
+#    value = "true"
+#  }
+#  set {
+#    name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/scw-loadbalancer-proxy-protocol-v2"
+#    value = "true"
+#  }
+#  set {
+#    name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/scw-loadbalancer-zone"
+#    value = scaleway_lb_ip.nginx_ip.zone
+#  }
+#  set {
+#    name = "controller.service.externalTrafficPolicy"
+#    value = "Local"
+#  }
 }
 
 resource "kubernetes_ingress_v1" "ingress_controller" {
+  depends_on = [helm_release.nginx_ingress]
   metadata {
     name = "ingress-controller"
   }
@@ -277,7 +306,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
             service {
               name = "frontend-service"
               port {
-                number = 4200
+                number = 80
               }
             }
           }

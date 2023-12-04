@@ -12,6 +12,7 @@ resource "helm_release" "nginx_ingress" {
   chart      = "ingress-nginx"
   wait       = true
   timeout    = 600
+  version = "4.5.2"
 }
 
 resource "kubernetes_ingress_v1" "ingress_controller" {

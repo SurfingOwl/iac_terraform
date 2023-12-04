@@ -23,6 +23,7 @@ terraform {
     skip_credentials_validation = true
     skip_region_validation      = true
     skip_requesting_account_id  = true
+    skip_metadata_api_check = true
   }
 }
 
@@ -33,6 +34,7 @@ module "cluster" {
   private_network_id = module.network.vpc_id
 }
 module "ingress" {
+#  depends_on = [module.cluster]
   source                 = "./ingress"
   cluster_host           = module.cluster.cluster_host
   cluster_token          = module.cluster.cluster_token

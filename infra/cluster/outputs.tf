@@ -1,9 +1,9 @@
 output "cluster_host" {
-  value = scaleway_k8s_cluster.this.kubeconfig[0].host
+  value = null_resource.kubeconfig.triggers.host
 }
 output "cluster_token" {
-  value = scaleway_k8s_cluster.this.kubeconfig[0].token
+  value = null_resource.kubeconfig.triggers.token
 }
 output "cluster_ca_certificate" {
-  value = scaleway_k8s_cluster.this.kubeconfig[0].cluster_ca_certificate
+  value = null_resource.kubeconfig.triggers.cluster_ca_certificate
 }

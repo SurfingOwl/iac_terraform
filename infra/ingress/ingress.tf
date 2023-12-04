@@ -1,13 +1,17 @@
+provider "helm" {
+  kubernetes {
+    host                   = var.cluster_host
+    token                  = var.cluster_token
+    cluster_ca_certificate = base64decode(var.cluster_ca_certificate)
+  }
+}
+
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
-  namespace  = "ingress-nginx"
-
-  repository       = "https://kubernetes.github.io/ingress-nginx"
-  chart            = "ingress-nginx"
-  create_namespace = true
-  wait             = true
-  timeout          = 600
-
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  wait       = true
+  timeout    = 600
 }
 
 resource "kubernetes_ingress_v1" "ingress_controller" {
@@ -15,35 +19,36 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
     name = "ingress-controller"
   }
   spec {
-    rule {
-      http {
-        path {
-          path = "/api"
-          backend {
-            service {
-              name = "backend-service"
-              port {
-                number = 3001
-              }
-            }
-          }
-        }
-      }
-    }
-    rule {
-      http {
-        path {
-          path = "/"
-          backend {
-            service {
-              name = "frontend-service"
-              port {
-                number = 80
-              }
-            }
-          }
-        }
-      }
-    }
+    ingress_class_name = "nginx"
+#    rule {
+#      http {
+#        path {
+#          path = "/api"
+#          backend {
+#            service {
+#              name = "backend-service"
+#              port {
+#                number = 3001
+#              }
+#            }
+#          }
+#        }
+#      }
+#    }
+#    rule {
+#      http {
+#        path {
+#          path = "/"
+#          backend {
+#            service {
+#              name = "frontend-service"
+#              port {
+#                number = 80
+#              }
+#            }
+#          }
+#        }
+#      }
+#    }
   }
 }

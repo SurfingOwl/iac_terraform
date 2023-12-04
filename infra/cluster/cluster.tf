@@ -38,3 +38,4 @@ resource "scaleway_k8s_pool" "this" {
   node_type  = "DEV1-M"
   size       = 1
 }
+

@@ -4,10 +4,6 @@ terraform {
       source  = "scaleway/scaleway"
       version = "2.29.0"
     }
-    local = {
-      source  = "hashicorp/local"
-      version = "2.4.0"
-    }
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "2.24.0"
@@ -37,7 +33,10 @@ module "cluster" {
   private_network_id = module.network.vpc_id
 }
 module "ingress" {
-  source = "./ingress"
+  source                 = "./ingress"
+  cluster_host           = module.cluster.cluster_host
+  cluster_token          = module.cluster.cluster_token
+  cluster_ca_certificate = module.cluster.cluster_ca_certificate
 }
 module "network" {
   source = "./network"

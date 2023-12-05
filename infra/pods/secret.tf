@@ -3,8 +3,6 @@ resource "kubernetes_secret" "backend_secret" {
     name = "backend-secret"
   }
   data = {
-    username            = ""
-    password            = ""
     MYSQL_DATABASE      = "babyteacher" # A MODIFIER
     MYSQL_USER          = "babyuser" # A MODIFIER
     MYSQL_PASSWORD      = "pass" # A MODIFIER
@@ -17,5 +15,15 @@ resource "kubernetes_secret" "backend_secret" {
     PORT                = 3001  # A MODIFIER
     FRONT_URL           = "${var.cluster_ip}:80" # A MODIFIER
   }
-  type = "kubernetes.io/basic-auth"
+  type = "Opaque"
+}
+
+resource "kubernetes_secret" "frontend_secret" {
+  metadata {
+    name = "frontend-secret"
+  }
+  data = {
+    BACKEND_URL = var.cluster_ip
+  }
+  type = "Opaque"
 }

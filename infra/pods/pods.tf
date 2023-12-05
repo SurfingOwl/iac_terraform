@@ -33,6 +33,11 @@ resource "kubernetes_pod" "babyteacher_frontend" {
     container {
       name  = "frontend"
       image = "rg.fr-par.scw.cloud/babyteacher-registry/frontend:latest"
+      env_from {
+        secret_ref {
+          name = kubernetes_secret.frontend_secret.metadata[0].name
+        }
+      }
       port {
         name           = "web-frontend"
         container_port = 80

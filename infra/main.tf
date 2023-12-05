@@ -23,29 +23,37 @@ terraform {
     skip_credentials_validation = true
     skip_region_validation      = true
     skip_requesting_account_id  = true
-    skip_metadata_api_check = true
+    skip_metadata_api_check     = true
   }
 }
 
 provider "scaleway" {}
+provider "kubernetes" {
+  host                   = module.cluster.cluster_host
+  token                  = module.cluster.cluster_token
+  cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
+}
+provider "helm" {
+  kubernetes {
+    host                   = module.cluster.cluster_host
+    token                  = module.cluster.cluster_token
+    cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
+  }
+}
 
 module "cluster" {
   source             = "./cluster"
   private_network_id = module.network.vpc_id
 }
 module "ingress" {
-#  depends_on = [module.cluster]
-  source                 = "./ingress"
-  cluster_host           = module.cluster.cluster_host
-  cluster_token          = module.cluster.cluster_token
-  cluster_ca_certificate = module.cluster.cluster_ca_certificate
+  source = "./ingress"
 }
 module "network" {
   source = "./network"
 }
 module "pods" {
   source     = "./pods"
-  cluster_ip = module.services.cluster_ip
+  cluster_ip = module.ingress.cluster_ip
 }
 module "services" {
   source = "./services"

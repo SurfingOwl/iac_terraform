@@ -4,13 +4,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  trigger_workflow:
+  terraform:
     runs-on: ubuntu-latest
     steps: 
-      - name: Terraform deploy
-        shell: bash
-        run: | 
-          echo "done"
-          sleep 120s
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform init
+        run: terraform init
+
+      # - name: Creating certificate
+      #   run: |
+      #     mkdir -p certs
+      #     echo "${{ env.CERT_CRT }}" > certs/server.crt
+      #     echo "${{ env.CERT_KEY }}" > certs/server.key
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve -input=false
+
+      
         
         

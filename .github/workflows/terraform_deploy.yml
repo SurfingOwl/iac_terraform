@@ -1,0 +1,16 @@
+name: 'Terraform deployment'
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  trigger_workflow:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Terraform deploy
+        shell: bash
+        run: | 
+          echo "done"
+          sleep 120s
+        
+        

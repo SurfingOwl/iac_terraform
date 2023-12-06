@@ -8,7 +8,7 @@ resource "kubernetes_pod" "babyteacher_backend" {
   spec {
     container {
       name  = "backend"
-      image = "rg.fr-par.scw.cloud/babyteacher-registry/backend:latest"
+      image = "rg.fr-par.scw.cloud/babyteacher-registry/${data.scaleway_registry_image.backend.name}:latest"
       env_from {
         secret_ref {
           name = kubernetes_secret.backend_secret.metadata[0].name
@@ -32,7 +32,7 @@ resource "kubernetes_pod" "babyteacher_frontend" {
   spec {
     container {
       name  = "frontend"
-      image = "rg.fr-par.scw.cloud/babyteacher-registry/frontend:latest"
+      image = "rg.fr-par.scw.cloud/babyteacher-registry/${data.scaleway_registry_image.frontend.name}:latest"
       env_from {
         secret_ref {
           name = kubernetes_secret.frontend_secret.metadata[0].name

@@ -9,6 +9,34 @@ resource "kubernetes_pod" "babyteacher_backend" {
     container {
       name  = "backend"
       image = "rg.fr-par.scw.cloud/babyteacher-registry/${data.scaleway_registry_image.backend.name}:latest"
+      env {
+        name = "MYSQL_DATABASE"
+        value = "babyteacher"
+      }
+      env {
+        name  = "MYSQL_HOST"
+        value = var.mysql_dns
+      }
+      env {
+        name  = "MYSQL_PORT"
+        value = 3306
+      }
+      env {
+        name = "MONGO_URI"
+        value = "mongodb://${var.mongo_dns}:27017"
+      }
+      env {
+        name = "MONGO_PORT"
+        value = 27017
+      }
+      env {
+        name = "PORT"
+        value = 3001
+      }
+      env {
+        name = "FRONT_URL"
+        value = var.front_dns
+      }
       env_from {
         secret_ref {
           name = kubernetes_secret.backend_secret.metadata[0].name

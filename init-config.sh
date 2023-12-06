@@ -1,6 +1,6 @@
-export SCW_ACCESS_KEY=
-export SCW_SECRET_KEY=
-export SCW_DEFAULT_PROJECT_ID=
+export SCW_ACCESS_KEY=${{ secrets.SCW_ACCESS_KEY }}
+export SCW_SECRET_KEY=${{ secrets.SCW_SECRET_KEY }}
+export SCW_DEFAULT_PROJECT_ID=${{ secrets.SCW_DEFAULT_PROJECT_ID }}
 
 
 export AWS_ACCESS_KEY_ID=${SCW_ACCESS_KEY}

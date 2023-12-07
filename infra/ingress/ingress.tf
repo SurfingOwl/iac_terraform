@@ -18,6 +18,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
       http {
         path {
           path = "/api"
+          path_type = "Prefix"
           backend {
             service {
               name = var.backend_service_name
@@ -32,7 +33,8 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
     rule {
       http {
         path {
-          path = "/"
+          path = "/(/|$)(.*)"
+          path_type = "Prefix"
           backend {
             service {
               name = var.frontend_service_name

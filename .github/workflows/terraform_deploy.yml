@@ -11,7 +11,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Setup env var
-        run: ./init/init-config.sh
+        run: ./init-config.sh
 
       - name: Terraform init
         run: terraform init

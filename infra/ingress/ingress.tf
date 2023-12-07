@@ -33,7 +33,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
     rule {
       http {
         path {
-          path = "/(/|$)(.*)"
+          path = "/"
           path_type = "Prefix"
           backend {
             service {

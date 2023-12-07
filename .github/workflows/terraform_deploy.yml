@@ -7,23 +7,21 @@ jobs:
   terraform:
 
     runs-on: ubuntu-latest
+
+    env:
+      SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY_ID }}
+      SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
+      SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
    
     steps: 
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        
-      - name: Setup terraform
-        uses: hashicorp/setup-terraform@v2
-        
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      
       - name: Terraform init
         run: terraform init
         working-directory: ./infra
-        env:
-          SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY_ID }}
-          SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
-          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
       
       # - name: Creating certificate
       #   run: |
@@ -35,10 +33,4 @@ jobs:
         working-directory: ./infra
         run: |
           terraform apply -auto-approve -input=false
-        env:
-          SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY_ID }}
-          SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
-          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
           

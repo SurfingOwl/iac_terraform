@@ -27,11 +27,7 @@ terraform {
   }
 }
 
-provider "scaleway" {
-  access_key = var.access_key_id
-  secret_key = var.secret_key
-  project_id = var.project_id
-}
+provider "scaleway" {}
 provider "kubernetes" {
   host                   = module.cluster.cluster_host
   token                  = module.cluster.cluster_token

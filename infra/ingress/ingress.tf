@@ -11,6 +11,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
   metadata {
     name = "ingress-controller"
   }
+  wait_for_load_balancer = true
   spec {
     ingress_class_name = "nginx"
     rule {

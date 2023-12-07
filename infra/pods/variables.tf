@@ -1,8 +1,3 @@
-variable "cluster_ip" {
-  type = string
-  description = "Kubernetes cluster ip"
-}
-
 variable "mysql_dns" {
   type = string
   description = "MySQL DNS"

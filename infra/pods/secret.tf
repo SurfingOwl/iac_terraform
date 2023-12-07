@@ -17,7 +17,7 @@ resource "kubernetes_secret" "frontend_secret" {
     name = "frontend-secret"
   }
   data = {
-    BACKEND_URL = var.cluster_ip
+    BACKEND_URL = var.front_dns
   }
   type = "Opaque"
 }

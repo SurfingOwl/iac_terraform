@@ -53,7 +53,6 @@ module "network" {
 }
 module "pods" {
   source     = "./pods"
-  cluster_ip = module.ingress.cluster_ip
   mysql_dns = module.services.mysql_dns
   front_dns = module.services.front_dns
   mongo_dns = module.services.mongo_dns

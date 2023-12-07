@@ -2,20 +2,30 @@ name: 'Terraform deployment'
 
 on: 
   workflow_dispatch:
-
+  
 jobs:
   terraform:
+
     runs-on: ubuntu-latest
+
+    env:
+      TF_VAR_access_key_id: ${{ secrets.SCW_ACCESS_KEY }}
+      TF_VAR_secret_key: ${{ secrets.SCW_SECRET_KEY }}
+      TF_VAR_project_id: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
+      SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY_ID }}
+      SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
+      SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
+   
     steps: 
-      - name: Setup terraform
-        uses: hashicorp/setup-terraform@v2
-
-      - name: Setup env var
-        run: ./init-config.sh
-
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      
       - name: Terraform init
         run: terraform init
-
+        working-directory: ./infra
+      
       # - name: Creating certificate
       #   run: |
       #     mkdir -p certs
@@ -23,9 +33,7 @@ jobs:
       #     echo "${{ env.CERT_KEY }}" > certs/server.key
 
       - name: Terraform Apply
+        working-directory: ./infra
         run: |
           terraform apply -auto-approve -input=false
-
-      
-        
-        
+          

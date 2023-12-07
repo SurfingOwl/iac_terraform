@@ -58,12 +58,6 @@ resource "kubernetes_pod" "babyteacher_frontend" {
     }
   }
   spec {
-#    volume {
-#      name = "nginx-config-volume"
-#      config_map {
-#        name = kubernetes_config_map.nginx_frontend_website_config.metadata[0].name
-#      }
-#    }
     container {
       name  = "frontend"
       image = "rg.fr-par.scw.cloud/babyteacher-registry/${data.scaleway_registry_image.frontend.name}:latest"

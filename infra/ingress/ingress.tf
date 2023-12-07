@@ -20,7 +20,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
           path = "/api"
           backend {
             service {
-              name = "backend-service"
+              name = var.backend_service_name
               port {
                 number = 3001
               }
@@ -35,7 +35,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
           path = "/"
           backend {
             service {
-              name = "frontend-service"
+              name = var.frontend_service_name
               port {
                 number = 80
               }

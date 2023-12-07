@@ -47,6 +47,8 @@ module "cluster" {
 }
 module "ingress" {
   source = "./ingress"
+  backend_service_name = module.services.backend_service_name
+  frontend_service_name = module.services.frontend_service_name
 }
 module "network" {
   source = "./network"

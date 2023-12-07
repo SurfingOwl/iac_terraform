@@ -34,4 +34,9 @@ jobs:
         working-directory: ./infra
         run: |
           terraform apply -auto-approve -input=false
-        
+          
+      - name: Debug Output
+        run: |
+          echo "SCW_ACCESS_KEY=${SCW_ACCESS_KEY}"
+          echo "SCW_SECRET_KEY=${SCW_SECRET_KEY}"
+

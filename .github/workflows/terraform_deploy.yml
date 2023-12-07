@@ -14,7 +14,13 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Setup env var
-        run: source init-config.sh
+        run: |
+          export SCW_ACCESS_KEY=${{ secrets.SCW_ACCESS_KEY }}
+          export SCW_SECRET_KEY=${{ secrets.SCW_SECRET_KEY }}
+          export SCW_DEFAULT_PROJECT_ID=${{ secrets.SCW_DEFAULT_PROJECT_ID }}
+
+          export AWS_ACCESS_KEY_ID=${SCW_ACCESS_KEY}
+          export AWS_SECRET_ACCESS_KEY=${SCW_SECRET_KEY}
         shell: bash
 
       - name: Terraform init

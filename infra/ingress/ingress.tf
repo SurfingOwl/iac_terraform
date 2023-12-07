@@ -12,7 +12,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
     name        = "ingress-controller"
     annotations = {
       "nginx.ingress.kubernetes.io/use-regex"      = "true"
-      "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
+      "nginx.ingress.kubernetes.io/rewrite-target" = "/$1"
       "nginx.ingress.kubernetes.io/ssl-redirect"   = "false"
     }
   }
@@ -38,7 +38,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
     rule {
       http {
         path {
-          path      = "/home/(/|$)(.*)"
+          path      = "/*"
           path_type = "Prefix"
           backend {
             service {

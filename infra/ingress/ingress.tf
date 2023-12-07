@@ -4,12 +4,17 @@ resource "helm_release" "nginx_ingress" {
   chart      = "ingress-nginx"
   wait       = true
   timeout    = 600
-  version = "4.5.2"
+  version    = "4.5.2"
 }
 
 resource "kubernetes_ingress_v1" "ingress_controller" {
   metadata {
-    name = "ingress-controller"
+    name        = "ingress-controller"
+    annotations = {
+      "nginx.ingress.kubernetes.io/use-regex"      = "true"
+      "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
+      "nginx.ingress.kubernetes.io/ssl-redirect"   = "false"
+    }
   }
   wait_for_load_balancer = true
   spec {
@@ -17,7 +22,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
     rule {
       http {
         path {
-          path = "/api"
+          path      = "/api"
           path_type = "Prefix"
           backend {
             service {
@@ -33,7 +38,7 @@ resource "kubernetes_ingress_v1" "ingress_controller" {
     rule {
       http {
         path {
-          path = "/"
+          path      = "/home/(/|$)(.*)"
           path_type = "Prefix"
           backend {
             service {

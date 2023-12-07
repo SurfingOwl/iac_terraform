@@ -25,6 +25,7 @@ jobs:
 
       - name: Terraform init
         run: terraform init
+        working-directory: ./infra
 
       # - name: Creating certificate
       #   run: |
@@ -33,9 +34,7 @@ jobs:
       #     echo "${{ env.CERT_KEY }}" > certs/server.key
 
       - name: Terraform Apply
+        working-directory: ./infra
         run: |
           terraform apply -auto-approve -input=false
-
-      
-        
         

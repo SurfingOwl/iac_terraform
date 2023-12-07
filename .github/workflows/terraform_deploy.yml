@@ -21,13 +21,7 @@ jobs:
       - name: Terraform init
         run: terraform init
         working-directory: ./infra
-      
-      # - name: Creating certificate
-      #   run: |
-      #     mkdir -p certs
-      #     echo "${{ env.CERT_CRT }}" > certs/server.crt
-      #     echo "${{ env.CERT_KEY }}" > certs/server.key
-
+        
       - name: Terraform Apply
         working-directory: ./infra
         run: |

@@ -2,10 +2,16 @@ name: 'Terraform deployment'
 
 on: 
   workflow_dispatch:
+    inputs:
+      value:
+        description: 'My input value'
+        required: true
+        default: 'commit hash'
+        type: string
+
   
 jobs:
   terraform:
-
     runs-on: ubuntu-latest
     env:
       SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
@@ -23,6 +29,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
+
+      - name: Output variable
+        run: echo ${{ github.event.inputs.front }}
 
       - name: Terraform init
         run: terraform init

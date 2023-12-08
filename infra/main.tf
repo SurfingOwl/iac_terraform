@@ -62,4 +62,6 @@ module "pods" {
 module "services" {
   source = "./services"
 }
-
+module "loki" {
+  source = "./loki"
+}

@@ -13,6 +13,12 @@ jobs:
       SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
       AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_SECRET_KEY }}
+
+      TF_VAR_MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      TF_VAR_MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      TF_VAR_MYSQL_ROOT_PASSWORD: ${{ secrets.ROOT_PASSWORD }}
+      TF_VAR_MONGO_USER: ${{ secrets.MONGO_USER }}
+      TF_VAR_MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
    
     steps:
       - uses: actions/checkout@v4

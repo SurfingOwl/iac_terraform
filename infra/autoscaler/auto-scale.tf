@@ -8,7 +8,7 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "backend_autoscaler" {
     max_replicas = 100
 
     scale_target_ref {
-      kind = "Pod"
+      kind = "Pods"
       name = var.backend_pod_name
     }
 

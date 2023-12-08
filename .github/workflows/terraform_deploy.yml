@@ -3,8 +3,8 @@ name: 'Terraform deployment'
 on: 
   workflow_dispatch:
     inputs:
-      value:
-        description: 'My input value'
+      front:
+        description: 'Commit hash'
         required: true
         default: 'commit hash'
         type: string

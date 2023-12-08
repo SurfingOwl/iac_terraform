@@ -3,11 +3,11 @@ resource "kubernetes_secret" "backend_secret" {
     name = "backend-secret"
   }
   data = {
-    MYSQL_USER          = "babyuser" # A MODIFIER
-    MYSQL_PASSWORD      = "pass" # A MODIFIER
-    MYSQL_ROOT_PASSWORD = "pass" # A MODIFIER
-    MONGO_USER          = "babyUser"   # A MODIFIER
-    MONGO_PASSWORD      = "toto" # A MODIFIER
+    MYSQL_USER          = var.MYSQL_USER
+    MYSQL_PASSWORD      = var.MYSQL_PASSWORD
+    MYSQL_ROOT_PASSWORD = var.MYSQL_ROOT_PASSWORD
+    MONGO_USER          = var.MONGO_USER
+    MONGO_PASSWORD      = var.MONGO_PASSWORD
   }
   type = "Opaque"
 }

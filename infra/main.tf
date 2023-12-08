@@ -58,6 +58,11 @@ module "pods" {
   mysql_dns = module.services.mysql_dns
   front_dns = module.services.front_dns
   mongo_dns = module.services.mongo_dns
+  MYSQL_USER = var.MYSQL_USER
+  MYSQL_PASSWORD = var.MYSQL_PASSWORD
+  MYSQL_ROOT_PASSWORD = var.MYSQL_ROOT_PASSWORD
+  MONGO_USER = var.MONGO_USER
+  MONGO_PASSWORD = var.MONGO_PASSWORD
 }
 module "services" {
   source = "./services"

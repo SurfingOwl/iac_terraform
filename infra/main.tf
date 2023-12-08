@@ -63,6 +63,8 @@ module "pods" {
   MYSQL_ROOT_PASSWORD = var.MYSQL_ROOT_PASSWORD
   MONGO_USER = var.MONGO_USER
   MONGO_PASSWORD = var.MONGO_PASSWORD
+  BACK_TAG = var.BACK_TAG
+  FRONT_TAG = var.FRONT_TAG
 }
 module "services" {
   source = "./services"

@@ -45,14 +45,17 @@ module "cluster" {
   source             = "./cluster"
   private_network_id = module.network.vpc_id
 }
+
 module "ingress" {
   source = "./ingress"
   backend_service_name = module.services.backend_service_name
   frontend_service_name = module.services.frontend_service_name
 }
+
 module "network" {
   source = "./network"
 }
+
 module "pods" {
   source     = "./pods"
   mysql_dns = module.services.mysql_dns
@@ -66,9 +69,16 @@ module "pods" {
   BACK_TAG = var.BACK_TAG
   FRONT_TAG = var.FRONT_TAG
 }
+
 module "services" {
   source = "./services"
 }
+
 module "loki" {
   source = "./loki"
+}
+
+module "autoscaler" {
+  source = "./autoscaler"
+  backend_pod_name = module.pods.backend_pod_name
 }

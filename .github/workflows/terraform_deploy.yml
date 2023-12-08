@@ -31,7 +31,7 @@ jobs:
       TF_VAR_MONGO_USER: ${{ secrets.MONGO_USER }}
       TF_VAR_MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
       TF_VAR_FRONT_TAG: ${{ github.event.inputs.front }}
-      TF_VAR_BACKEND_TAG: ${{ github.event.inputs.back }}
+      TF_VAR_BACK_TAG: ${{ github.event.inputs.back }}
    
     steps:
       - uses: actions/checkout@v4

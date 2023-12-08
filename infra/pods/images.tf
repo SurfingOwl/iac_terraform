@@ -9,9 +9,7 @@ terraform {
 
 data "scaleway_registry_image" "backend" {
   name = "backend"
-  tags = ["latest"]
 }
 data "scaleway_registry_image" "frontend" {
   name = "frontend"
-  tags = ["latest"]
 }

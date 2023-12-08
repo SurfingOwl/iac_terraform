@@ -37,3 +37,11 @@ variable "MONGO_PASSWORD" {
   type = string
   description = "Mongo Password"
 }
+variable "FRONT_TAG" {
+  type = string
+  description = "Front image tag"
+}
+variable "BACK_TAG" {
+  type = string
+  description = "Back image tag"
+}

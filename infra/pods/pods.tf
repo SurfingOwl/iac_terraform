@@ -8,7 +8,7 @@ resource "kubernetes_pod" "babyteacher_backend" {
   spec {
     container {
       name  = "backend"
-      image = "rg.fr-par.scw.cloud/babyteacher-registry/${data.scaleway_registry_image.backend.name}:latest"
+      image = "rg.fr-par.scw.cloud/babyteacher-registry/${data.scaleway_registry_image.backend.name}:${var.BACK_TAG}"
       env {
         name = "MYSQL_DATABASE"
         value = "babyteacher"
@@ -60,7 +60,7 @@ resource "kubernetes_pod" "babyteacher_frontend" {
   spec {
     container {
       name  = "frontend"
-      image = "rg.fr-par.scw.cloud/babyteacher-registry/${data.scaleway_registry_image.frontend.name}:latest"
+      image = "rg.fr-par.scw.cloud/babyteacher-registry/${data.scaleway_registry_image.frontend.name}:${var.FRONT_TAG}"
       env_from {
         secret_ref {
           name = kubernetes_secret.frontend_secret.metadata[0].name
@@ -84,7 +84,7 @@ resource "kubernetes_pod" "babyteacher_database" {
   spec {
     container {
       name  = "mysql"
-      image = "rg.fr-par.scw.cloud/babyteacher-registry/mysql:latest"
+      image = "rg.fr-par.scw.cloud/babyteacher-registry/mysql:${var.BACK_TAG}"
       port {
         name           = "mysql"
         container_port = 3306
@@ -103,7 +103,7 @@ resource "kubernetes_pod" "babyteacher_mongo" {
   spec {
     container {
       name  = "mongo"
-      image = "rg.fr-par.scw.cloud/babyteacher-registry/mongo:latest"
+      image = "rg.fr-par.scw.cloud/babyteacher-registry/mongo:${var.BACK_TAG}"
       port {
         name           = "mongo"
         container_port = 27017
